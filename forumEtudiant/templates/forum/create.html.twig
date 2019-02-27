@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>Déposez un sujet...</h3>
+    {{ form_start(form) }}
+        {{ form_row(form.title,{'label':'Titre','attr':{'placeholder':'Titre du sujet'}}) }}
+        {{ form_row(form.description,{'label':'Decription','attr':{'placeholder':'La description du sujet'}}) }}
+        {{ form_row(form.image,{'label':'Image','attr':{'placeholder':'Telecharger une photo'}}) }}
+        {{ form_row(form.niveau,{'label':'Niveau d\'étude'}) }}
+
+        <button type="submit" class="btn btn-success">Déposer</button>
+    {{ form_end(form) }}
+{% endblock %}

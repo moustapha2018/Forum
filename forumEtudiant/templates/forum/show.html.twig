@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <article>
+        <h2>{{ sujet.title }} </h2>
+        <div class="metadata">
+            Ecrit le {{ sujet.createdAt |date('d/m/Y') }} à {{ sujet.createdAt | date('H:i')  }} {{ sujet.niveau.libelle }}
+        </div>
+        <div class="content">
+            <img src="{{ sujet.image }}" alt="">
+            <p>
+                {{ sujet.description | raw }}
+            </p>
+        </div>
+    </article>
+
+{% endblock %}
