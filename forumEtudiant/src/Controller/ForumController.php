@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Sujet;
 use App\Entity\User;
+use App\Form\CommentType;
 use App\Form\SujetType;
+use App\Repository\CommentRepository;
 use App\Repository\SujetRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -59,11 +62,27 @@ class ForumController extends AbstractController
      * @Route("/show/{id}", name="show_sujet")
      */
 
-    public function showSujet($id, SujetRepository $repository){
-
+    public function showSujet($id, SujetRepository $repository, Request $request, ObjectManager $manager,CommentRepository $repoComment){
         $sujet = $repository->find($id);
+        $comment = new Comment();
+
+        $form = $this->createForm(CommentType::class,$comment);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $comment->setSujet($sujet);
+            $comment->setCreatedAt(new \DateTime());
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToRoute("show_sujet",['id' => $sujet ->getId()]);
+        }
+        $commentaires =$repoComment->findBy([],array('id' => 'DESC'));
         return $this-> render('forum/show.html.twig',[
-            'sujet' => $sujet
+            'sujet' => $sujet,
+            'form' =>$form->createView(),
+            'comments' =>$commentaires
         ]);
     }
 }

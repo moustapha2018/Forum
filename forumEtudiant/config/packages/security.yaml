@@ -24,7 +24,7 @@ security:
 
             logout:
                 path: logout_security
-                target: home
+                target: sujet_forum
 
             # activate different ways to authenticate
 

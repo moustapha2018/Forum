@@ -1,17 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <article>
-        <h2>{{ sujet.title }} </h2>
-        <div class="metadata">
-            Ecrit le {{ sujet.createdAt |date('d/m/Y') }} à {{ sujet.createdAt | date('H:i')  }} {{ sujet.niveau.libelle }}
+
+
+               <h2 style="text-align: center">{{ sujet.title }} </h2>
+               <div class="metadata">
+                  <p style="text-align: center"> Ecrit le {{ sujet.createdAt |date('d/m/Y') }} à {{ sujet.createdAt | date('H:i')  }} {{ sujet.niveau.libelle }} par <strong>{{ sujet.user.username }}</strong>
+                  </p>
+               </div>
+
+               <p style="text-align: center;"><img src="{{ sujet.image }}" width="95%"  alt=""></p>
+
+
+               <div class="content">
+                   <p>
+                       {{ sujet.description | raw }}
+                   </p>
+               </div>
+           </div>
+
+
+        <div class="container">
+            <h4 style="text-align: center;">il ya eu  <strong>{{ comments|length }}</strong> commentaires pour ce sujet </h4>
+            {%  for comment in comments %}
+                <p style="text-align: center; font-family: Arial;font-size: 20px;">Ce commentaire a été posté par <strong>{{ comment.pseudo }}</strong> le
+                    <strong>{{ comment.createdAt |date('d/m/Y') }}</strong> à <strong>{{ comment.createdAt| date('H:i')}}</strong>:<p>
+
+                <p style="text-align:center;"><strong>Explication:</strong>{{ comment.commentaire }}</p>
+             </p>
+                <hr>
+            {%  endfor %}
+            {{ form_start(form) }}
+                 {{ form_row(form.pseudo,{'label':'Pseudo','attr':{'placeholder':'Votre pseudo'}}) }}
+                 {{ form_row(form.commentaire,{'label':'Commentaire','attr':{'placeholder':'laissez ici votre commentaire'}}) }}
+            <button type="submit" class="btn btn-success">Envoyer</button>
+            {{ form_end(form) }}
         </div>
-        <div class="content">
-            <img src="{{ sujet.image }}" alt="">
-            <p>
-                {{ sujet.description | raw }}
-            </p>
-        </div>
-    </article>
+    <br>
+    <br>
+
+
 
 {% endblock %}
