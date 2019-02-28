@@ -48,7 +48,7 @@ class ForumController extends AbstractController
             $manager ->persist($sujet);
             $manager->flush();
 
-            return $this->redirectToRoute('sujet_forum');
+            return $this->redirectToRoute('mes_sujet');
         }
 
 
@@ -84,5 +84,70 @@ class ForumController extends AbstractController
             'form' =>$form->createView(),
             'comments' =>$commentaires
         ]);
+    }
+
+    //mes sujets
+
+    /**
+     * @Route("mesSujets", name ="mes_sujet")
+     */
+    public function mesSujets(UserRepository $repoUser){
+        $idUser = $this->getUser()->getId();
+        //ici j'ai recupere l'id de l'utilisateur connecté
+        $user = $repoUser->find($idUser);
+        //ici j'ai recupere l'utilisateur connecte a partir de son id
+        $mesSujets = $user->getSujetuser();
+        #la j'ai chercher tous les sujets qu'il a poste
+
+        return $this->render('forum/messujet.html.twig',[
+            'mesSujets' =>$mesSujets
+        ]);
+    }
+
+    /**
+     * @Route("/edit/{id}", name ="edit_sujet")
+     */
+    public function edit($id, SujetRepository $repository, Request $request,ObjectManager $manager){
+
+
+        $sujet = $repository->find($id);
+
+        $form = $this->createForm(SujetType::class,$sujet);
+        if($request->isMethod('POST'))
+        {
+            $form->handleRequest($request);
+            if($form->isValid())
+            {
+                $manager->flush();
+                return $this->redirectToRoute('mes_sujet');
+            }
+        }
+
+
+        return $this ->render('/forum/edit.html.twig',[
+            'sujet'=>$sujet,
+            'form' =>$form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name ="delete_sujet")
+     */
+    public function delete($id, SujetRepository $repository,ObjectManager $manager){
+
+        $sujet = $repository->find($id);
+
+        $manager->remove($sujet);
+        $manager->flush();
+        return $this ->redirectToRoute('mes_sujet');
+    }
+
+    /**
+     * @Route("/edited", name="edited_sujet")
+     */
+    public function edited(Request $request){
+
+
+      return $this->redirectToRoute('mes_sujet');
     }
 }

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body%}
+   <caption>Listes de mes sujets</caption>
+
+      <table class="table">
+
+         <thead>
+         <tr>
+            <th scope="col">#</th>
+            <th scope="col">Titre</th>
+            <th scope="col">Niveau</th>
+            <th scope="col">Date</th>
+            <th scope="col">Actions</th>
+         </tr>
+         </thead>
+         {% for sujet in mesSujets %}
+            <tbody>
+            <tr>
+
+               <td>{{ sujet.id }}</td>
+               <td>{{ sujet.title }}</td>
+               <td>{{ sujet.niveau.libelle }}</td>
+               <td>{{ sujet.createdAt| date('d/m/Y' ) }}</td>
+               <td>
+                  <a href="{{ path('edit_sujet', {'id': sujet.id}) }}" class="btn btn-success">Modifier</a>
+                  <a href="{{ path('delete_sujet', {'id': sujet.id}) }}" class="btn btn-success">Supprimer</a>
+               </td>
+
+            </tr>
+
+            </tbody>
+         {% endfor %}
+      </table>
+
+
+{% endblock %}
